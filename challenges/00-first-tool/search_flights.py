@@ -4,6 +4,8 @@ This stage demonstrates dependency injection and deterministic filtering.
 No LLM, network request, or API key is needed for this first step.
 """
 
+from datetime import datetime
+
 MOCK_FLIGHTS = [
     {"id": "FL101", "origin": "LON", "destination": "PAR", "date": "2026-12-01", "price_gbp": 85},
     {"id": "FL102", "origin": "LON", "destination": "PAR", "date": "2026-12-01", "price_gbp": 120},
@@ -23,6 +25,15 @@ def search_flights(flights: list[dict], origin: str, destination: str, date: str
     Returns:
         Matching flight records, or an empty list if none match.
     """
+    if not isinstance(date, str):
+        raise ValueError("date must be a string in YYYY-MM-DD format")
+    try:
+        parsed_date = datetime.strptime(date, "%Y-%m-%d")
+    except ValueError as exc:
+        raise ValueError("date must be a valid calendar date in YYYY-MM-DD format") from exc
+    if parsed_date.strftime("%Y-%m-%d") != date:
+        raise ValueError("date must use exactly YYYY-MM-DD format")
+
     return [
         flight for flight in flights
         if flight["origin"] == origin
