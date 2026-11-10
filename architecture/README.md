@@ -1,12 +1,15 @@
-# Architecture diagrams
+# Progressive architecture learning path
 
-These Mermaid diagrams render directly in GitHub Markdown. They are conceptual designs, not claims that every component is implemented.
+Follow these five stages in order, from simplest to most complex:
 
-1. [Agent execution loop](01-agent-execution-loop.md)
-2. [Flight-search agent](02-flight-search-agent.md)
-3. [Tool calling and smolagents](03-smolagents-tool-architecture.md)
-4. [Memory and planning](04-memory-and-planning.md)
-5. [Multi-agent orchestration](05-multi-agent-orchestration.md)
-6. [Evaluation and observability](06-evaluation-and-observability.md)
+1. [Single tool agent](stage-01-single-tool.md)
+2. [Validation and ranking](stage-02-validation.md)
+3. [Reliability and approval](stage-03-reliability.md)
+4. [Memory and planning](stage-04-memory-planning.md)
+5. [Multi-agent orchestration](stage-05-multi-agent.md)
 
-Use these alongside the numbered lessons and implementation challenges. Update diagrams when the implementation changes.
+## Animated walkthrough
+
+Download [agent-walkthrough.html](agent-walkthrough.html) and open it locally in a browser. Use **Next stage** and **Previous** to reveal the architecture progressively. GitHub's source preview does not execute HTML.
+
+These are conceptual architectures, not completed implementations. The first mock flight-ranking challenge is the starting implementation.
