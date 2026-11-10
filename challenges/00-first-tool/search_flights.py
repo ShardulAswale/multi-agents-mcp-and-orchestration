@@ -1,6 +1,6 @@
 """Stage 1: write your first agent-compatible Python tool.
 
-Exercise: complete the TODO to return matching mock flights.
+This stage demonstrates dependency injection and deterministic filtering.
 No LLM, network request, or API key is needed for this first step.
 """
 
