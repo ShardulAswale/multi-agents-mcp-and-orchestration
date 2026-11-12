@@ -9,8 +9,8 @@ For each stage: read the concept, inspect the linked Python code, run the test o
 |---|---|---|---|---|
 | 1 | Agent loop, prompts, configuration | [fundamentals](lessons/01-agent-fundamentals/README.md), [first tool](challenges/00-first-tool/run_agent.py) | Notes and runnable LLM example (requires HF_TOKEN) | Compare LLM versus deterministic routing |
 | 2 | Typed tools, validation, ranking | [tool notes](lessons/02-tool-calling/README.md), [search](challenges/00-first-tool/search_flights.py), [ranker](challenges/01-flight-filtering/flight_ranker.py) | Implemented | Test invalid dates, missing inputs and direct-flight constraints |
-| 3 | Reliability, retries, approval | [architecture](architecture/stage-03-reliability.md) | Concept only | Add bounded retries and human confirmation |
-| 4 | Memory and planning | [architecture](architecture/stage-04-memory-planning.md) | Concept only | Persist preferences with explicit updates and expiry |
+| 3 | Reliability, retries, approval | [architecture](architecture/stage-03-reliability.md), [Python workflow](lessons/03-reliable-workflows/workflow.py), [guide](lessons/03-reliable-workflows/README.md) | Runnable mock implementation | Add jitter, idempotency and live API integration |
+| 4 | Memory and planning | [architecture](architecture/stage-04-memory-planning.md), [Python memory and planner](lessons/04-memory-and-planning/memory.py), [guide](lessons/04-memory-and-planning/README.md) | Runnable in-memory implementation | Add secure persistent storage |
 | 5 | Multi-agent coordination | [architecture](architecture/stage-05-multi-agent.md) | Concept only | Split flights, hotels and meals; resolve conflicts |
 | 6 | Evaluation and judge checks | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md) | Learning guide, not implementation | Build reference cases and compute task success |
 | 7 | Observability and optimisation | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md) | Learning guide, not implementation | Add traces, latency measurements and regression tests |
@@ -21,7 +21,7 @@ For each stage: read the concept, inspect the linked Python code, run the test o
 - [smolagents tool wrapper](challenges/00-first-tool/smolagents_tool.py): exposes typed flight search.
 - [mock flight search](challenges/00-first-tool/search_flights.py): inspect inputs and fixtures.
 - [deterministic ranking](challenges/01-flight-filtering/flight_ranker.py): rejects invalid prices and optionally excludes overnight layovers.
-- [ranking tests](tests/test_flight_ranker.py) and [date tests](tests/test_stage_one_date_validation.py).
+- [ranking tests](tests/test_flight_ranker.py), [date tests](tests/test_stage_one_date_validation.py), and [workflow/memory tests](tests/test_workflow_and_memory.py).
 - [architecture walkthrough](architecture/agent-walkthrough.html): interactive local HTML; GitHub does not execute its preview.
 - [capstone placeholder](projects/flight-agent/README.md): future integration point.
 
@@ -29,6 +29,8 @@ For each stage: read the concept, inspect the linked Python code, run the test o
 ```bash
 python -m unittest discover -s tests -v
 python challenges/01-flight-filtering/flight_ranker.py
+python lessons/03-reliable-workflows/workflow.py
+python lessons/04-memory-and-planning/memory.py
 # Optional, requires Hugging Face access:
 # pip install -e ".[agents]"
 # export HF_TOKEN=...   # use environment or a local secret manager
