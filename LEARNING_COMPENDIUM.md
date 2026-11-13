@@ -11,7 +11,7 @@ For each stage: read the concept, inspect the linked Python code, run the test o
 | 2 | Typed tools, validation, ranking | [tool notes](lessons/02-tool-calling/README.md), [search](challenges/00-first-tool/search_flights.py), [ranker](challenges/01-flight-filtering/flight_ranker.py) | Implemented | Test invalid dates, missing inputs and direct-flight constraints |
 | 3 | Reliability, retries, approval | [architecture](architecture/stage-03-reliability.md), [Python workflow](lessons/03-reliable-workflows/workflow.py), [guide](lessons/03-reliable-workflows/README.md) | Runnable mock implementation | Add jitter, idempotency and live API integration |
 | 4 | Memory and planning | [architecture](architecture/stage-04-memory-planning.md), [Python memory and planner](lessons/04-memory-and-planning/memory.py), [guide](lessons/04-memory-and-planning/README.md) | Runnable in-memory implementation | Add secure persistent storage |
-| 5 | Multi-agent coordination | [architecture](architecture/stage-05-multi-agent.md) | Concept only | Split flights, hotels and meals; resolve conflicts |
+| 5 | Multi-agent coordination | [architecture](architecture/stage-05-multi-agent.md), [Python coordinators](lessons/05-multi-agent-coordination/coordinator.py), [lesson guide](lessons/05-multi-agent-coordination/README.md) | Runnable deterministic coordinator and simulated model-directed routing | Connect a real LLM router, add policy checks and compare cost/latency |
 | 6 | Evaluation and judge checks | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md) | Learning guide, not implementation | Build reference cases and compute task success |
 | 7 | Observability and optimisation | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md) | Learning guide, not implementation | Add traces, latency measurements and regression tests |
 | 8 | Production deployment | [deployment guide](docs/PRODUCTION_CHECKLIST.md) | Learning guide, not implementation | Add queue, rate limit, async workers and load tests |
@@ -31,6 +31,7 @@ python -m unittest discover -s tests -v
 python challenges/01-flight-filtering/flight_ranker.py
 python lessons/03-reliable-workflows/workflow.py
 python lessons/04-memory-and-planning/memory.py
+python lessons/05-multi-agent-coordination/coordinator.py
 # Optional, requires Hugging Face access:
 # pip install -e ".[agents]"
 # export HF_TOKEN=...   # use environment or a local secret manager
