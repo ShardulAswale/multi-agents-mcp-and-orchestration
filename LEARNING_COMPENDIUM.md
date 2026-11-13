@@ -12,7 +12,7 @@ For each stage: read the concept, inspect the linked Python code, run the test o
 | 3 | Reliability, retries, approval | [architecture](architecture/stage-03-reliability.md), [Python workflow](lessons/03-reliable-workflows/workflow.py), [guide](lessons/03-reliable-workflows/README.md) | Runnable mock implementation | Add jitter, idempotency and live API integration |
 | 4 | Memory and planning | [architecture](architecture/stage-04-memory-planning.md), [Python memory and planner](lessons/04-memory-and-planning/memory.py), [guide](lessons/04-memory-and-planning/README.md) | Runnable in-memory implementation | Add secure persistent storage |
 | 5 | Multi-agent coordination | [architecture](architecture/stage-05-multi-agent.md), [Python coordinators](lessons/05-multi-agent-coordination/coordinator.py), [lesson guide](lessons/05-multi-agent-coordination/README.md) | Runnable deterministic coordinator and simulated model-directed routing | Connect a real LLM router, add policy checks and compare cost/latency |
-| 6 | Evaluation and judge checks | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md) | Learning guide, not implementation | Build reference cases and compute task success |
+| 6 | Evaluation and judge checks | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md), [Python evaluator](lessons/06-agent-evaluation/evaluate.py), [lesson guide](lessons/06-agent-evaluation/README.md) | Runnable offline evaluation with reference cases and regression tests; no LLM judge yet | Add calibrated judge and live provider metrics |
 | 7 | Observability and optimisation | [evaluation guide](docs/EVALUATION_AND_EDGE_CASES.md) | Learning guide, not implementation | Add traces, latency measurements and regression tests |
 | 8 | Production deployment | [deployment guide](docs/PRODUCTION_CHECKLIST.md) | Learning guide, not implementation | Add queue, rate limit, async workers and load tests |
 
@@ -32,6 +32,7 @@ python challenges/01-flight-filtering/flight_ranker.py
 python lessons/03-reliable-workflows/workflow.py
 python lessons/04-memory-and-planning/memory.py
 python lessons/05-multi-agent-coordination/coordinator.py
+python lessons/06-agent-evaluation/evaluate.py
 # Optional, requires Hugging Face access:
 # pip install -e ".[agents]"
 # export HF_TOKEN=...   # use environment or a local secret manager
