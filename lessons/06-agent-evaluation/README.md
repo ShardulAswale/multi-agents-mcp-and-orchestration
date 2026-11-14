@@ -31,3 +31,5 @@ Incorrect tool parameters; provider timeout/429/503; invalid ranking; stale avai
 
 ## Exercise
 Introduce a deliberately incorrect ranking agent and observe the failure; then fix it and rerun tests. Add cases for malformed prices and provider timeouts. Compare both coordinator implementations using the same cases.
+
+Important interfaces: `Case` stores independent ground truth; `evaluate_case(case, model_directed=False)` checks status, exact order, constraints, tool calls and latency; `evaluate_suite` aggregates rates, total calls, failed-case names and total latency. Run `python lessons/06-agent-evaluation/evaluate.py`. Empty suites return zero rates rather than dividing by zero. Common mistakes are self-grading against agent output, hiding denominators, treating constraint rate as task success, or describing the simulated router as real LLM performance. Exercises: add confidence intervals, repeated latency samples and a deliberately failing case taxonomy.

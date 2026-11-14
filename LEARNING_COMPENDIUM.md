@@ -1,6 +1,6 @@
 # AI Agent Engineering — Learning Compendium
 
-This is the navigation hub for the existing Hugging Face AI Agents course work and the planned production-grade flight assistant. **Existing source files are preserved at their original paths.** The links below distinguish implemented code from conceptual material.
+This is the navigation hub for existing work based on the Hugging Face AI Agents Course and for repository-specific engineering extensions. **Existing source files are preserved at their original paths.** Official-course progress currently stops partway through Unit 2.1, after tools and `ToolCallingAgent`; see [COURSE_PROGRESS.md](COURSE_PROGRESS.md). Stages 3–7 below deepen the same flight example but do not represent completion of official Units 2.2–4.
 
 ## How to study
 For each stage: read the concept, inspect the linked Python code, run the test or example, change one parameter, observe the failure, and record what you learned. Never mistake mock flight records for live availability.
@@ -27,6 +27,7 @@ For each stage: read the concept, inspect the linked Python code, run the test o
 
 ## Run
 ```bash
+python -m pip install -e .
 python -m unittest discover -s tests -v
 python challenges/01-flight-filtering/flight_ranker.py
 python lessons/03-reliable-workflows/workflow.py
@@ -34,11 +35,11 @@ python lessons/04-memory-and-planning/memory.py
 python lessons/05-multi-agent-coordination/coordinator.py
 python lessons/06-agent-evaluation/evaluate.py
 python lessons/07-observability/observability.py
-# Optional, requires Hugging Face access:
-# pip install -e ".[agents]"
-# export HF_TOKEN=...   # use environment or a local secret manager
-# python challenges/00-first-tool/run_agent.py
 ```
+
+The offline suite uses only the standard library and never reads `HF_TOKEN`. For the optional live example, install `python -m pip install -e ".[agents]"`. A GitHub Actions secret is not copied into a local clone. Set `HF_TOKEN` through a local secret manager or a temporary environment variable without echoing it, then set `HF_LIVE_INFERENCE=1` to acknowledge the network/provider call. In PowerShell, use `$env:HF_TOKEN = Read-Host -MaskInput` and `$env:HF_LIVE_INFERENCE = '1'`; remove both afterward with `Remove-Item Env:HF_TOKEN, Env:HF_LIVE_INFERENCE`. Provider calls may consume account credits.
+
+Live smoke tests are isolated in `tests_live/` and the manual `hf-live-inference.yml` workflow. Push/PR CI runs only `tests/`, editable-install validation and compile checks; it needs no secret.
 
 ## Engineering principles
 1. Validate constraints in deterministic Python, not only an LLM or judge model.
@@ -49,3 +50,7 @@ python lessons/07-observability/observability.py
 6. Compare changes on task success, constraint adherence, p95 latency, tool error rate, and cost per successful task.
 
 See [edge cases](docs/EVALUATION_AND_EDGE_CASES.md) and [production checklist](docs/PRODUCTION_CHECKLIST.md). This repository is educational and **does not book real flights**.
+
+## Audit status
+
+Implemented and tested: deterministic search/ranking, request validation, bounded read retries, approval gate, scoped expiring preferences, deterministic planning, both coordinators, simulated routing, offline evaluation, trace/span recording and latency summaries. Simulated: flight inventory, booking boundary, model-directed Lesson 5 router and all evaluation fixtures. Optional live integration: Lesson 1 smolagents call only. Documentation-only/future work: real inventory/booking/payment, durable memory, production telemetry, queueing, idempotent writes, load tests and the capstone application. See the [full audit report](docs/AUDIT_REPORT.md).

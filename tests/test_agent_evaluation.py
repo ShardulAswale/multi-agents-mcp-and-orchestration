@@ -46,6 +46,11 @@ class EvaluationTests(unittest.TestCase):
         self.assertEqual(result["rank_calls"], 0)
         self.assertTrue(result["passed"])
 
+    def test_report_includes_failures_and_total_latency(self):
+        report = module.evaluate_suite()
+        self.assertEqual(report["failed_cases"], [])
+        self.assertGreaterEqual(report["latency_ms"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

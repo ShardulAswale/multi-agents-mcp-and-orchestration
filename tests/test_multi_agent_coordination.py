@@ -68,6 +68,37 @@ class CoordinatorTests(unittest.TestCase):
             self.search, self.rank, module.demo_router, max_steps=2).run({})
         self.assertEqual(result["status"], "step_limit_exceeded")
 
+    def test_non_mapping_request_skips_tools(self):
+        result = module.DeterministicCoordinator(self.search, self.rank).run(None)
+        self.assertEqual(result["status"], "invalid_request")
+        self.assertEqual(self.search.calls, 0)
+
+    def test_duplicate_search_is_rejected(self):
+        choices = iter(("search", "search"))
+        result = module.LLMDrivenCoordinator(
+            self.search, self.rank, lambda state, allowed: next(choices)).run({})
+        self.assertEqual(result["status"], "duplicate_search")
+        self.assertEqual(self.search.calls, 1)
+
+    def test_duplicate_rank_is_rejected(self):
+        choices = iter(("search", "rank", "rank"))
+        result = module.LLMDrivenCoordinator(
+            self.search, self.rank, lambda state, allowed: next(choices)).run({})
+        self.assertEqual(result["status"], "duplicate_rank")
+        self.assertEqual(self.rank.calls, 1)
+
+    def test_premature_finish_is_rejected(self):
+        result = module.LLMDrivenCoordinator(
+            self.search, self.rank, lambda state, allowed: "finish").run({})
+        self.assertEqual(result["status"], "premature_finish")
+
+    def test_invalid_flight_records_fail_at_boundary(self):
+        for args in (("", 10, True), ("A", float("nan"), True),
+                     ("A", -1, True), ("A", 10, "yes")):
+            with self.subTest(args=args):
+                with self.assertRaises(ValueError):
+                    Flight(*args)
+
 
 if __name__ == "__main__":
     unittest.main()

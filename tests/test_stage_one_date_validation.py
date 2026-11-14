@@ -32,6 +32,22 @@ class DateValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             module.search_flights([], "LON", "PAR", "2026-2-3")
 
+    def test_city_codes_are_normalized(self):
+        result = module.search_flights(module.MOCK_FLIGHTS, "lon", "par", "2026-12-01")
+        self.assertEqual([flight["id"] for flight in result], ["FL101", "FL102"])
+
+    def test_invalid_or_same_city_codes_are_rejected(self):
+        for origin, destination in (("LO", "PAR"), ("L0N", "PAR"),
+                                    ("LON", "LON"), (None, "PAR")):
+            with self.subTest(origin=origin, destination=destination):
+                with self.assertRaises(ValueError):
+                    module.search_flights([], origin, destination, "2026-12-01")
+
+    def test_malformed_provider_records_are_skipped(self):
+        records = [None, {}, {"origin": "LON", "destination": "PAR"},
+                   {"origin": 123, "destination": "PAR", "date": "2026-12-01"}]
+        self.assertEqual(module.search_flights(records, "LON", "PAR", "2026-12-01"), [])
+
 
 if __name__ == "__main__":
     unittest.main()

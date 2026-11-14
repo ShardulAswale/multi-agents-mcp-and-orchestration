@@ -13,6 +13,14 @@ MOCK_FLIGHTS = [
 ]
 
 
+def _city_code(value: str, field: str) -> str:
+    """Validate and normalize an IATA-style three-letter city code."""
+    if (not isinstance(value, str) or len(value) != 3 or
+            not value.isascii() or not value.isalpha()):
+        raise ValueError(f"{field} must be a three-letter ASCII city code")
+    return value.upper()
+
+
 def search_flights(flights: list[dict], origin: str, destination: str, date: str) -> list[dict]:
     """Search mock flights by origin, destination, and departure date.
 
@@ -25,6 +33,12 @@ def search_flights(flights: list[dict], origin: str, destination: str, date: str
     Returns:
         Matching flight records, or an empty list if none match.
     """
+    if not isinstance(flights, list):
+        raise ValueError("flights must be a list of records")
+    origin = _city_code(origin, "origin")
+    destination = _city_code(destination, "destination")
+    if origin == destination:
+        raise ValueError("origin and destination cannot match")
     if not isinstance(date, str):
         raise ValueError("date must be a string in YYYY-MM-DD format")
     try:
@@ -34,12 +48,21 @@ def search_flights(flights: list[dict], origin: str, destination: str, date: str
     if parsed_date.strftime("%Y-%m-%d") != date:
         raise ValueError("date must use exactly YYYY-MM-DD format")
 
-    return [
-        flight for flight in flights
-        if flight["origin"] == origin
-        and flight["destination"] == destination
-        and flight["date"] == date
-    ]
+    matches = []
+    for flight in flights:
+        # Provider records are untrusted. A malformed record must not crash the
+        # whole search or be returned to the model as if it were valid.
+        if not isinstance(flight, dict):
+            continue
+        record_origin = flight.get("origin")
+        record_destination = flight.get("destination")
+        if not isinstance(record_origin, str) or not isinstance(record_destination, str):
+            continue
+        if (record_origin.upper() == origin and
+                record_destination.upper() == destination and
+                flight.get("date") == date):
+            matches.append(flight)
+    return matches
 
 
 if __name__ == "__main__":

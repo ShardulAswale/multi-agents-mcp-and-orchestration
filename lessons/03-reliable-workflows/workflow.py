@@ -9,6 +9,7 @@ purchase or other irreversible side effect.
 """
 from dataclasses import dataclass
 from datetime import date
+import math
 from typing import Callable
 import time
 
@@ -29,16 +30,21 @@ class Request:
 def validate(request: Request) -> None:
     """Fail before any tool invocation if the user's hard constraints are invalid."""
     for code in (request.origin, request.destination):
-        if not isinstance(code, str) or len(code) != 3 or not code.isalpha():
+        if (not isinstance(code, str) or len(code) != 3 or
+                not code.isascii() or not code.isalpha()):
             raise ValueError("Origin and destination must be three-letter codes")
     if request.origin.upper() == request.destination.upper():
         raise ValueError("Origin and destination cannot match")
+    if not isinstance(request.direct_only, bool):
+        raise ValueError("direct_only must be a boolean")
     try:
         if date.fromisoformat(request.departure).isoformat() != request.departure:
             raise ValueError("Use YYYY-MM-DD")
     except (TypeError, ValueError) as exc:
         raise ValueError("Departure must be a valid YYYY-MM-DD date") from exc
-    if isinstance(request.max_price_gbp, bool) or not isinstance(request.max_price_gbp, (int, float)) or not 0 < request.max_price_gbp < float("inf"):
+    if (isinstance(request.max_price_gbp, bool) or
+            not isinstance(request.max_price_gbp, (int, float)) or
+            not math.isfinite(request.max_price_gbp) or request.max_price_gbp <= 0):
         raise ValueError("Budget must be a positive finite number")
 
 
@@ -65,16 +71,32 @@ def recommend(request: Request, search: Callable[[Request], list[dict]]) -> list
     """Validate -> search -> independently filter -> rank, without booking."""
     validate(request)
     records = search_with_retry(search, request)
+    if not isinstance(records, list):
+        raise ValueError("search must return a list of flight records")
     eligible = []
     for item in records:
-        price = item.get("price_gbp")
-        if isinstance(price, bool) or not isinstance(price, (int, float)) or not 0 <= price <= request.max_price_gbp:
+        if not isinstance(item, dict):
             continue
-        if item.get("origin", "").upper() != request.origin.upper() or item.get("destination", "").upper() != request.destination.upper():
+        price = item.get("price_gbp")
+        identifier = item.get("id")
+        stops = item.get("stops")
+        if (isinstance(price, bool) or not isinstance(price, (int, float)) or
+                not math.isfinite(price) or not 0 <= price <= request.max_price_gbp):
+            continue
+        if not isinstance(identifier, str) or not identifier:
+            continue
+        if isinstance(stops, bool) or not isinstance(stops, int) or stops < 0:
+            continue
+        item_origin = item.get("origin")
+        item_destination = item.get("destination")
+        if not isinstance(item_origin, str) or not isinstance(item_destination, str):
+            continue
+        if (item_origin.upper() != request.origin.upper() or
+                item_destination.upper() != request.destination.upper()):
             continue
         if item.get("date") != request.departure:
             continue
-        if request.direct_only and item.get("stops") != 0:
+        if request.direct_only and stops != 0:
             continue
         eligible.append(item)
     return sorted(eligible, key=lambda item: (item["price_gbp"], item["id"]))

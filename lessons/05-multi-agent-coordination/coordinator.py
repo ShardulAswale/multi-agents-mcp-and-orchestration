@@ -4,6 +4,8 @@ Run: python lessons/05-multi-agent-coordination/coordinator.py
 No external dependencies, API keys, purchases or network requests.
 """
 from dataclasses import dataclass
+import math
+from collections.abc import Mapping
 from typing import Callable, Literal
 
 
@@ -12,6 +14,21 @@ class Flight:
     code: str
     price: float
     direct: bool
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.code, str) or not self.code:
+            raise ValueError("flight code must be a non-empty string")
+        if (isinstance(self.price, bool) or not isinstance(self.price, (int, float)) or
+                not math.isfinite(self.price) or self.price < 0):
+            raise ValueError("flight price must be a non-negative finite number")
+        if not isinstance(self.direct, bool):
+            raise ValueError("direct must be a boolean")
+
+
+def valid_request(request: object) -> bool:
+    """Validate the narrow request schema before invoking any specialist."""
+    return (isinstance(request, Mapping) and
+            isinstance(request.get("direct_only", False), bool))
 
 
 # Each specialist has one responsibility and a narrow, testable interface.
@@ -45,7 +62,7 @@ class DeterministicCoordinator:
         self.search, self.ranker = search, ranker
 
     def run(self, request: dict) -> dict:
-        if not isinstance(request.get("direct_only", False), bool):
+        if not valid_request(request):
             return {"status": "invalid_request", "flights": []}
         flights = self.search.run(request)
         if not flights:
@@ -76,7 +93,7 @@ class LLMDrivenCoordinator:
         self.router, self.max_steps = router, max_steps
 
     def run(self, request: dict) -> dict:
-        if not isinstance(request.get("direct_only", False), bool):
+        if not valid_request(request):
             return {"status": "invalid_request", "flights": []}
         flights = None
         ranked = None
@@ -95,7 +112,9 @@ class LLMDrivenCoordinator:
                 if not flights:
                     return {"status": "no_flights_found", "flights": []}
             elif choice == "rank":
-                if not flights or ranked is not None:
+                if ranked is not None:
+                    return {"status": "duplicate_rank", "flights": []}
+                if not flights:
                     return {"status": "invalid_step_order", "flights": []}
                 ranked = self.ranker.run(flights)
             else:  # finish

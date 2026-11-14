@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import unittest
+import uuid
 
 p = Path(__file__).resolve().parents[1] / "lessons/07-observability/observability.py"
 spec = importlib.util.spec_from_file_location("lesson07_observability", p)
@@ -60,6 +61,14 @@ class ObservabilityTests(unittest.TestCase):
                                 recorder, model_directed=True)
         self.assertEqual(out["status"], "success")
         self.assertEqual(len(recorder.spans), 3)
+
+    def test_trace_ids_are_valid_and_unique(self):
+        recorder = module.Recorder()
+        first = module.run_traced({}, [], recorder)["trace_id"]
+        second = module.run_traced({}, [], recorder)["trace_id"]
+        self.assertNotEqual(first, second)
+        self.assertEqual(uuid.UUID(hex=first).hex, first)
+        self.assertEqual(uuid.UUID(hex=second).hex, second)
 
 
 if __name__ == "__main__":

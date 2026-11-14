@@ -22,9 +22,11 @@ class PreferenceStore:
     def remember(self, user_id: str, key: str, value: str, *,
                  now: datetime, ttl: timedelta, source: str = "explicit-user") -> None:
         """Only store explicit, scoped preferences with positive lifetime."""
-        if not user_id or not key or not value or ttl <= timedelta(0):
+        if (not isinstance(user_id, str) or not isinstance(key, str) or
+                not isinstance(value, str) or not user_id or not key or not value or
+                not isinstance(ttl, timedelta) or ttl <= timedelta(0)):
             raise ValueError("user, key, value and positive TTL are required")
-        if now.tzinfo is None:
+        if not isinstance(now, datetime) or now.tzinfo is None or now.utcoffset() is None:
             raise ValueError("now must be timezone-aware")
         if source != "explicit-user":
             raise PermissionError("Do not persist inferred preferences as user instructions")
@@ -32,6 +34,8 @@ class PreferenceStore:
 
     def recall(self, user_id: str, key: str, *, now: datetime) -> str | None:
         """Expired preferences are deleted and never silently reused."""
+        if not isinstance(now, datetime) or now.tzinfo is None or now.utcoffset() is None:
+            raise ValueError("now must be timezone-aware")
         item = self._data.get((user_id, key))
         if item is None:
             return None

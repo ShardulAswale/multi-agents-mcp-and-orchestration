@@ -28,6 +28,20 @@ class FlightRankingTests(unittest.TestCase):
     def test_empty(self):
         self.assertEqual(module.rank_flights([]), [])
 
+    def test_non_finite_boolean_and_malformed_records_are_excluded(self):
+        records = [None,
+                   {"id": "nan", "price_gbp": float("nan")},
+                   {"id": "infinite", "price_gbp": float("inf")},
+                   {"id": "boolean", "price_gbp": True},
+                   {"id": "bad_layovers", "price_gbp": 10, "layovers": "none"}]
+        self.assertEqual(module.rank_flights(records), [])
+
+    def test_departure_before_arrival_is_excluded(self):
+        record = {"id": "invalid", "price_gbp": 10, "layovers": [
+            {"arrival": "2026-12-01T12:00:00", "departure": "2026-12-01T11:00:00"}
+        ]}
+        self.assertEqual(module.rank_flights([record]), [])
+
 
 if __name__ == "__main__":
     unittest.main()

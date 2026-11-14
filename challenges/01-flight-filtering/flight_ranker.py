@@ -1,12 +1,18 @@
 """Deterministic mock flight filtering for the first agent challenge."""
 
 from datetime import datetime
+import math
 from typing import Any
 
 
 def has_overnight_layover(flight: dict[str, Any]) -> bool:
     """True when any connection crosses a local calendar date."""
-    for layover in flight.get("layovers", []):
+    layovers = flight.get("layovers", [])
+    if not isinstance(layovers, list):
+        raise ValueError("layovers must be a list")
+    for layover in layovers:
+        if not isinstance(layover, dict):
+            raise ValueError("each layover must be a record")
         arrival = datetime.fromisoformat(layover["arrival"])
         departure = datetime.fromisoformat(layover["departure"])
         if departure < arrival:
@@ -20,7 +26,11 @@ def rank_flights(flights: list[dict[str, Any]], exclude_overnight: bool = True) 
     """Validate, filter, and return flights sorted by price."""
     eligible = []
     for flight in flights:
-        if not isinstance(flight.get("price_gbp"), (int, float)) or isinstance(flight["price_gbp"], bool) or flight["price_gbp"] < 0:
+        if not isinstance(flight, dict):
+            continue
+        price = flight.get("price_gbp")
+        if (not isinstance(price, (int, float)) or isinstance(price, bool) or
+                not math.isfinite(price) or price < 0):
             continue
         try:
             if exclude_overnight and has_overnight_layover(flight):

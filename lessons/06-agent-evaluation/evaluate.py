@@ -77,6 +77,8 @@ def evaluate_suite(cases=CASES, model_directed=False) -> dict:
             "task_success_rate": sum(r["passed"] for r in results) / total if total else 0.0,
             "constraint_satisfaction_rate": sum(r["direct_ok"] for r in results) / total if total else 0.0,
             "tool_calls": sum(r["search_calls"] + r["rank_calls"] for r in results),
+            "failed_cases": [r["case"] for r in results if not r["passed"]],
+            "latency_ms": sum(r["latency_ms"] for r in results),
             "results": results}
 
 
@@ -87,7 +89,9 @@ if __name__ == "__main__":
         print(f"{label}: {report['passed']}/{report['total']} passed; "
               f"task success={report['task_success_rate']:.1%}; "
               f"constraints={report['constraint_satisfaction_rate']:.1%}; "
-              f"tool calls={report['tool_calls']}")
+              f"tool calls={report['tool_calls']}; "
+              f"total latency={report['latency_ms']:.3f} ms; "
+              f"failed cases={report['failed_cases'] or 'none'}")
         for result in report["results"]:
             print("  ", result["case"], "PASS" if result["passed"] else "FAIL",
                   f"latency={result['latency_ms']:.3f} ms")
