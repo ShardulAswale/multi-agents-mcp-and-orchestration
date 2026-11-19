@@ -8,7 +8,7 @@ from benchmark import evaluate, submit
 
 
 def run_evaluation(profile: gr.OAuthProfile | None):
-    if os.environ.get("AGENT_BACKEND", "ollama") == "hf" and (
+    if os.environ.get("AGENT_BACKEND", "ollama").strip().lower() == "hf" and (
             profile is None or not profile.username):
         return "Sign in with Hugging Face before live provider evaluation.", []
     try:
