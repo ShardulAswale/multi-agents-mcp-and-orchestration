@@ -31,7 +31,7 @@ This file distinguishes official course progress from extra engineering material
 - Unit 2.2: LlamaIndex.
 - Unit 2.3: LangGraph.
 - Unit 3: Agentic RAG use case.
-- Unit 4: final project, leaderboard, and certification.
+- Unit 4: benchmark qualification, leaderboard submission, and certification. The code in `projects/gaia-final-agent/` is a runnable starting implementation but has not been submitted, scored, or certified.
 - Bonus units.
 
 The repository’s Lessons 3–7 are independent engineering extensions covering reliability, memory, coordination, evaluation, and observability. They are useful and tested, but they must not be confused with completion of the official units above.
