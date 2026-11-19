@@ -1,12 +1,12 @@
-# Hugging Face AI Agent Challenges
+# Multi-Agents, MCP and Orchestration
 
-Hands-on learning repository following the official [Hugging Face AI Agents Course](https://huggingface.co/learn/agents-course/en/unit0/introduction). Course work intentionally stops at the code that is currently implemented: Unit 1 fundamentals/first agent and the Unit 2.1 tools plus `ToolCallingAgent` sections. Flight records are fixtures: this repository does not search live inventory or book tickets.
+Hands-on learning repository following the official [Hugging Face AI Agents Course](https://huggingface.co/learn/agents-course/en/unit0/introduction). Official-course checkpoints have been completed through part of Unit 2.1. A separate, unassessed Unit 4 GAIA capstone implementation is also available. Flight records are fixtures: this repository does not search live inventory or book tickets.
 
 ## Structure
 - `lessons/`: numbered learning notes and pseudocode
 - `challenges/`: runnable implementations
 - `tests/`: deterministic regression tests
-- `projects/`: capstone agent applications
+- `projects/`: capstone agent applications, including the [Unit 4 GAIA agent](projects/gaia-final-agent/README.md)
 
 ## Start here
 1. Create a Python 3.10+ virtual environment.
@@ -28,7 +28,7 @@ The exact official-course mapping and stopping point are recorded in [COURSE_PRO
 - [ ] Unit 2.2 LlamaIndex
 - [ ] Unit 2.3 LangGraph
 - [ ] Unit 3 Agentic RAG
-- [ ] Unit 4 final project/certification
+- [ ] Unit 4 benchmark qualification/certification (agent code implemented; score not verified)
 
 Those unchecked units are deliberately outside the current scope.
 
