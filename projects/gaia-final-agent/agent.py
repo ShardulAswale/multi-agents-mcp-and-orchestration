@@ -115,7 +115,7 @@ class GAIAAgent:
 
     def __init__(self, client=None, environment=None):
         environment = os.environ if environment is None else environment
-        backend = environment.get("AGENT_BACKEND", "ollama").lower()
+        backend = environment.get("AGENT_BACKEND", "ollama").strip().lower()
         if backend == "hf":
             token = require_hf_credentials(environment)
             model = environment.get("GAIA_MODEL", "Qwen/Qwen2.5-Coder-32B-Instruct:featherless-ai")
