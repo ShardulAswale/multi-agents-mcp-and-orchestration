@@ -25,7 +25,6 @@ def questions() -> list[dict]:
 
 def attachment_for(task_id: str, file_name: str, directory: str) -> str:
     """Stream a GAIA attachment with size and path traversal protection."""
-    import requests
     if not re.fullmatch(r"[a-zA-Z0-9-]{1,80}", task_id):
         raise ValueError("Invalid GAIA task ID")
     name = file_name.replace("\\", "/").rsplit("/", 1)[-1]
@@ -33,6 +32,7 @@ def attachment_for(task_id: str, file_name: str, directory: str) -> str:
     if name in {"", ".", ".."}:
         raise ValueError("Invalid attachment filename")
     path = Path(directory) / f"{task_id}_{name}"
+    import requests
     with requests.get(f"{BASE}/files/{quote(task_id)}", timeout=60, stream=True) as response:
         response.raise_for_status()
         size = 0
