@@ -7,6 +7,20 @@ dependencies = []
 
 [project.optional-dependencies]
 agents = ["smolagents[openai]>=1.22,<2"]
+course = [
+    "llama-index-core>=0.14,<0.15",
+    "llama-index-llms-ollama>=0.12,<1",
+    "langgraph>=1.2,<2",
+    "langchain>=1.2,<2",
+    "langchain-ollama>=1.1,<2",
+]
+training = [
+    "datasets>=3,<5",
+    "peft>=0.17,<1",
+    "transformers>=4.52,<6",
+    "trl>=0.19,<1",
+    "accelerate>=1.7,<2",
+]
 
 [build-system]
 requires = ["setuptools>=77"]

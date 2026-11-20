@@ -12,6 +12,9 @@ build/
 develop-eggs/
 dist/
 downloads/
+.gaia-private/
+.course-private/
+/gaia-*.json
 eggs/
 .eggs/
 lib/

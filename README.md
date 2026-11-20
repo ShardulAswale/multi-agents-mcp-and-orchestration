@@ -1,6 +1,6 @@
 # Multi-Agents, MCP and Orchestration
 
-Hands-on learning repository following the official [Hugging Face AI Agents Course](https://huggingface.co/learn/agents-course/en/unit0/introduction). Official-course checkpoints have been completed through part of Unit 2.1. A separate, unassessed Unit 4 GAIA capstone implementation is also available. Flight records are fixtures: this repository does not search live inventory or book tickets.
+Hands-on learning repository following the official [Hugging Face AI Agents Course](https://huggingface.co/learn/agents-course/en/unit0/introduction). Local checkpoints cover the core framework units, Agentic RAG architecture and optional bonus-unit equivalents, with external-execution boundaries recorded below. The Unit 4 GAIA capstone achieved an official 35% score. Flight records are fixtures: this repository does not search live inventory or book tickets.
 
 ## Structure
 - `lessons/`: numbered learning notes and pseudocode
@@ -24,13 +24,19 @@ The exact official-course mapping and stopping point are recorded in [COURSE_PRO
 - [x] Unit 1 runnable checkpoint adapted to the mock flight domain
 - [x] Unit 2.1 tools with `@tool`
 - [x] Unit 2.1 `ToolCallingAgent` checkpoint
-- [ ] Remaining Unit 2.1 topics (CodeAgent, retrieval, vision, multi-agent course notebooks)
-- [ ] Unit 2.2 LlamaIndex
-- [ ] Unit 2.3 LangGraph
-- [ ] Unit 3 Agentic RAG
-- [ ] Unit 4 benchmark qualification/certification (agent code implemented; score not verified)
+- [x] Unit 2.1 bounded local `CodeAgent` checkpoint
+- [x] Unit 2.1 local custom knowledge-base retrieval checkpoint
+- [x] Unit 2.1 bounded local manager/worker checkpoint
+- [x] Unit 2.1 bounded local vision-agent checkpoint
+- [x] Unit 2.2 LlamaIndex tool/workflow/query-engine/local-agent checkpoint
+- [x] Unit 2.3 LangGraph routing, local ReAct and document-vision checkpoint
+- [x] Unit 3 official Alfred Agentic RAG use case (local Ollama plus opt-in public integrations)
+- [x] Unit 4 official qualification threshold (35%, 7/20; certificate not claimed)
+- [x] Bonus Unit 1 validated LoRA/function-calling pipeline and local adapter training
+- [x] Bonus Unit 2 local observability and offline evaluation checkpoint
+- [x] Bonus Unit 3 bounded local Pokémon battle-advisor checkpoint
 
-Those unchecked units are deliberately outside the current scope.
+Hosted inference, external telemetry, adapter publication and online battle-server execution remain explicit opt-in activities.
 
 ## Test boundaries
 

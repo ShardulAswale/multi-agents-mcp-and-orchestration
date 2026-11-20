@@ -1,6 +1,6 @@
 # 02 — Tool calling and smolagents
 
-Course alignment: the implemented subset of official Unit 2.1—[Tools](https://huggingface.co/learn/agents-course/en/unit2/smolagents/tools) and [Tool Calling Agents](https://huggingface.co/learn/agents-course/en/unit2/smolagents/tool_calling_agents). CodeAgent, retrieval, vision, multi-agent notebooks, LlamaIndex, and LangGraph are intentionally not marked complete.
+Course alignment: this lesson covers the Unit 2.1 [Tools](https://huggingface.co/learn/agents-course/en/unit2/smolagents/tools) and [Tool Calling Agents](https://huggingface.co/learn/agents-course/en/unit2/smolagents/tool_calling_agents) concepts. Runnable checkpoints for later framework topics are tracked separately in `COURSE_PROGRESS.md`.
 
 A tool has a name, description, typed inputs, and an implementation. The model chooses arguments; Python validates and executes them.
 
